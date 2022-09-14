@@ -11,7 +11,6 @@ const opts = {
 }
 
 const MovieDetail = ({ movieData }) => {
-    console.log(movieData)
     return (
         movieData && (
             <div className="trailer-container">

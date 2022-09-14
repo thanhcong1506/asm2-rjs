@@ -9,10 +9,15 @@ const baseUrl = 'https://image.tmdb.org/t/p/original/'
 const END_POINT = 'https://api.themoviedb.org/3'
 const API_KEY = 'dc17f7a108f21df4ba0390d44000c8ef'
 
-export default function MovieList({ fetchUrl, title, isLargeRow }) {
+export default function MovieList({
+    fetchUrl,
+    title,
+    isLargeRow,
+    detailState,
+    setDetailState,
+}) {
     const [movies, setMovies] = useState([])
     const [videoTrailer, setVideoTrailer] = useState({})
-    const [isOpenVideoDetail, setIsOpenVideoDetail] = useState(false)
 
     const fetchData = async () => {
         try {
@@ -28,6 +33,8 @@ export default function MovieList({ fetchUrl, title, isLargeRow }) {
     }, [])
 
     const handleClick = async (id) => {
+        if (detailState.isOpen && detailState.activeId == id)
+            return setDetailState({ activeId: null, isOpen: false })
         try {
             const result = await Promise.all([
                 instance.get(`${END_POINT}/movie/${id}?api_key=${API_KEY}`),
@@ -43,7 +50,7 @@ export default function MovieList({ fetchUrl, title, isLargeRow }) {
             )
             const { key } = eligibleVideo[0]
             result[0].data.key = key
-            setIsOpenVideoDetail(!isOpenVideoDetail)
+            setDetailState({ ...detailState, activeId: id, isOpen: true })
             setVideoTrailer(result[0].data)
         } catch (error) {
             console.log(error)
@@ -58,7 +65,6 @@ export default function MovieList({ fetchUrl, title, isLargeRow }) {
                     movies.map((movie) => (
                         <img
                             onClick={() => {
-                                setIsOpenVideoDetail(false)
                                 handleClick(movie.id)
                             }}
                             key={movie.id}
@@ -75,7 +81,7 @@ export default function MovieList({ fetchUrl, title, isLargeRow }) {
                         />
                     ))}
             </div>
-            {isOpenVideoDetail && (
+            {detailState.isOpen && detailState.activeId == videoTrailer.id && (
                 <MovieDetail movieData={videoTrailer} />
             )}
         </div>

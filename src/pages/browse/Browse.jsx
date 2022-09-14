@@ -8,41 +8,81 @@ import './Browse.scss'
 import { useState } from 'react'
 
 function Browse() {
-    const [isOpen, setIsOpen] = useState(false)
+    const [detailState, setDetailState] = useState({
+        activeId: null,
+        isOpen: false
+    })
     return (
         <div>
             <div className="home">
                 <NavBar />
                 <Banner />
-                <MovieList
-                    fetchUrl={requests.fetchNetflixOriginals}
-                    isLargeRow
-                />
-                <MovieList title="Xu hướng" fetchUrl={requests.fetchTrending} />
-                <MovieList
-                    title="Xếp hạng cao"
-                    fetchUrl={requests.fetchTopRated}
-                />
-                <MovieList
-                    title="Hành động"
-                    fetchUrl={requests.fetchActionMovies}
-                />
-                <MovieList title="Hài" fetchUrl={requests.fetchComedyMovies} />
-                <MovieList
-                    title="Kinh dị"
-                    fetchUrl={requests.fetchHorrorMovies}
-                />
-                <MovieList
-                    title="Lãng mạn"
-                    fetchUrl={requests.fetchRomanceMovies}
-                />
-                <MovieList
-                    title="Tài liệu"
-                    fetchUrl={requests.fetchDocumentaries}
-                />
+                {movie_list.map((item, index) =>
+                    item.isLargeRow ? (
+                        <MovieList
+                            detailState={detailState}
+                            setDetailState={setDetailState}
+                            key={index}
+                            isLargeRow
+                            fetchUrl={item.url}
+                            title={item.title}
+                        />
+                    ) : (
+                        <MovieList
+                            detailState={detailState}
+                            setDetailState={setDetailState}
+                            key={index}
+                            fetchUrl={item.url}
+                            title={item.title}
+                        />
+                    )
+                )}
             </div>
         </div>
     )
 }
+
+const movie_list = [
+    {
+        title: '',
+        isLargeRow: true,
+        url: requests.fetchNetflixOriginals,
+    },
+    {
+        title: 'Xu hướng',
+        isLargeRow: false,
+        url: requests.fetchTrending,
+    },
+    {
+        title: 'Xếp hạng cao',
+        isLargeRow: false,
+        url: requests.fetchTopRated,
+    },
+    {
+        title: 'Hành động',
+        isLargeRow: false,
+        url: requests.fetchActionMovies,
+    },
+    {
+        title: 'Hài',
+        isLargeRow: false,
+        url: requests.fetchComedyMovies,
+    },
+    {
+        title: 'Kinh dị',
+        isLargeRow: false,
+        url: requests.fetchHorrorMovies,
+    },
+    {
+        title: 'Lãng mạn',
+        isLargeRow: false,
+        url: requests.fetchRomanceMovies,
+    },
+    {
+        title: 'Tài liệu',
+        isLargeRow: false,
+        url: requests.fetchDocumentaries,
+    },
+]
 
 export default Browse
