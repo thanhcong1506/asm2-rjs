@@ -34,7 +34,7 @@ export default function MovieList({
     }, [])
 
     const handleClick = async (id) => {
-        if (detailState.isOpen && detailState.activeId == id)
+        if (detailState.isOpen && detailState.activeId === id)
             return setDetailState({ activeId: null, isOpen: false })
         try {
             const result = await Promise.all([
