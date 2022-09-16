@@ -10,41 +10,39 @@ import { useState } from 'react'
 function Browse() {
     const [detailState, setDetailState] = useState({
         activeId: null,
-        isOpen: false
+        isOpen: false,
     })
     return (
-        <div>
-            <div className="home">
-                <NavBar />
-                <Banner />
-                {movie_list.map((item, index) =>
-                    item.isLargeRow ? (
-                        <MovieList
-                            detailState={detailState}
-                            setDetailState={setDetailState}
-                            key={index}
-                            isLargeRow
-                            fetchUrl={item.url}
-                            title={item.title}
-                        />
-                    ) : (
-                        <MovieList
-                            detailState={detailState}
-                            setDetailState={setDetailState}
-                            key={index}
-                            fetchUrl={item.url}
-                            title={item.title}
-                        />
-                    )
-                )}
-            </div>
+        <div className="home">
+            <NavBar />
+            <Banner />
+            {movie_list.map((item, index) =>
+                item.isLargeRow ? (
+                    <MovieList
+                        detailState={detailState}
+                        setDetailState={setDetailState}
+                        key={index}
+                        isLargeRow
+                        fetchUrl={item.url}
+                        title={item.title}
+                    />
+                ) : (
+                    <MovieList
+                        detailState={detailState}
+                        setDetailState={setDetailState}
+                        key={index}
+                        fetchUrl={item.url}
+                        title={item.title}
+                    />
+                )
+            )}
         </div>
     )
 }
 
 const movie_list = [
     {
-        title: '',
+        title: 'Original',
         isLargeRow: true,
         url: requests.fetchNetflixOriginals,
     },

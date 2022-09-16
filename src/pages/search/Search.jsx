@@ -1,11 +1,18 @@
-import React from 'react';
+import React from 'react'
+import NavBar from '../../component/NavBar/NavBar'
+import Banner from '../../component/Banner/Banner'
+import Results from '../../component/ResultList/Results'
+import { useSearchParams } from 'react-router-dom'
 
 const Search = () => {
-	return (
-		<div className='app'>
-			<h1>Search</h1>
-		</div>
-	);
-};
+    const [search] = useSearchParams()
+    return (
+        <div className="home">
+            <NavBar />
+            <Banner />
+            <Results search={search.get('q')} />
+        </div>
+    )
+}
 
-export default Search;
+export default Search

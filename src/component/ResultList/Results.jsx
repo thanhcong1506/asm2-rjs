@@ -1,39 +1,40 @@
+import { Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import './MovieList.scss'
 import instance from '../../axios'
+import requests from '../../requests'
 import MovieDetail from '../VideoDetail/VideoDetail'
 
 const baseUrl = 'https://image.tmdb.org/t/p/original/'
-
 // Video
 const END_POINT = 'https://api.themoviedb.org/3'
 const API_KEY = 'dc17f7a108f21df4ba0390d44000c8ef'
 
-export default function MovieList({
-    fetchUrl,
-    title,
-    isLargeRow,
-    detailState,
-    setDetailState,
-}) {
-    const [movies, setMovies] = useState([])
+const Results = ({ search }) => {
+    const [searchList, setSearchList] = useState([])
+    const [detailState, setDetailState] = useState({
+        activeId: null,
+        isOpen: false,
+    })
     const [videoTrailer, setVideoTrailer] = useState({})
 
-    const fetchData = async () => {
-        try {
-            const request = await instance.get(fetchUrl)
-            setMovies(request.data.results)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     useEffect(() => {
-        fetchData()
-    }, [])
+        const fetchSearch = async () => {
+            try {
+                const res = await instance.get(
+                    `${requests.fetchSearch}&query=${search}`
+                )
+                setSearchList(res.data.results)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchSearch()
+    }, [search])
+
+    console.log(searchList)
 
     const handleClick = async (id) => {
+        console.log(id)
         if (detailState.isOpen && detailState.activeId == id)
             return setDetailState({ activeId: null, isOpen: false })
         try {
@@ -71,27 +72,21 @@ export default function MovieList({
 
     return (
         <div className="list">
-            <h2 className="listTitle">{title}</h2>
+            <h2 className="listTitle">Search Result</h2>
             <div className="listPosters">
-                {movies &&
-                    movies.map((movie) => (
+                {!searchList.length ? (
+                    <Typography py={2}>No Movie Found!...</Typography>
+                ) : (
+                    searchList.map((item, index) => (
                         <img
-                            onClick={() => {
-                                handleClick(movie.id)
-                            }}
-                            key={movie.id}
-                            className={`listPoster ${
-                                isLargeRow && 'listPosterLarge'
-                            }`}
-                            src={`${baseUrl}${
-                                isLargeRow
-                                    ? movie.poster_path
-                                    : movie.backdrop_path
-                            }`}
-                            alt={movie.name}
+                            key={index}
+                            src={baseUrl + item.poster_path}
+                            className="listPoster listPosterLarge"
+                            onClick={() => handleClick(item.id)}
                             style={{ cursor: 'pointer' }}
                         />
-                    ))}
+                    ))
+                )}
             </div>
             {detailState.isOpen && detailState.activeId == videoTrailer.id && (
                 <MovieDetail movieData={videoTrailer} />
@@ -99,3 +94,5 @@ export default function MovieList({
         </div>
     )
 }
+
+export default Results
