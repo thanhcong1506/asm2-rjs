@@ -6,6 +6,7 @@ import NavBar from '../../component/NavBar/NavBar'
 
 import './Browse.scss'
 import { useState } from 'react'
+import SearchForm from '../../component/Search/SearchForm'
 
 function Browse() {
     const [detailState, setDetailState] = useState({

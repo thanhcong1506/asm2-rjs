@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import './MovieList.scss'
 import instance from '../../axios'
-import MovieDetail from '../VideoDetail/VideoDetail'
+import MovieDetail from '../MovieDetail/MovieDetail'
 
 const baseUrl = 'https://image.tmdb.org/t/p/original/'
 

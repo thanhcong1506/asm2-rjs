@@ -1,92 +1,60 @@
-import React, { useState, useDeferredValue } from 'react'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Paper from '@mui/material/Paper'
-import InputBase from '@mui/material/InputBase'
-import IconButton from '@mui/material/IconButton'
-import SearchIcon from '@mui/icons-material/Search'
-import Stack from '@mui/material/Stack'
-import Container from '@mui/material/Container'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useRef, useState } from 'react'
+import './SearchForm.scss'
 import { useNavigate, createSearchParams } from 'react-router-dom'
 
-const style = {
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-}
-
-const SearchForm = ({ setShow }) => {
+const SearchForm = () => {
     const navigate = useNavigate()
-    // search keyword
-    const [keyword, setKeyword] = useState('')
-    const handleOnchangeSearch = (e) => setKeyword(e.target.value)
-    const searchTerm = useDeferredValue(keyword, { timeoutMs: 2000 })
 
-    // trigger enter
-    const handleKeyUpEnter = (e) => e.keyCode === 13 && handleCallApiSearch()
+    const [searchValue, setSearchValue] = useState('')
 
-    // call API search
-    const handleCallApiSearch = async () => {
-        setShow(false)
-        if (!searchTerm) return
+    const inputRef = useRef()
+
+    const fetchData = async (e) => {
+        if (!searchValue) return
         return navigate({
             pathname: '/search',
             search: createSearchParams({
-                query: searchTerm,
+                query: searchValue,
             }).toString(),
         })
     }
 
+    const searchMovie = (e) => {
+        e.preventDefault()
+        fetchData(e)
+    }
+
     return (
-        <Container>
-            <Box
-                xs={style}
-                style={{
-                    backgroundColor: 'white',
-                    padding: 20,
-                    borderRadius: 5,
-                }}
-            >
-                <Paper
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: '100%',
-                    }}
-                >
-                    <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Search"
-                        inputProps={{ 'aria-label': 'search keyword' }}
-                        value={keyword}
-                        onChange={handleOnchangeSearch}
-                        onKeyUp={handleKeyUpEnter}
+        <div className="search">
+            <form className="form" action="" onSubmit={searchMovie}>
+                <div className="formInput">
+                    <input
+                        className="input"
+                        type={'text'}
+                        ref={inputRef}
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <IconButton
-                        type="button"
-                        sx={{ p: '10px' }}
-                        aria-label="search"
+                    <FontAwesomeIcon className="navBarSearch" icon={faSearch} />
+                </div>
+                <div className="button">
+                    <button
+                        className="resetButton"
+                        onClick={() => {
+                            setSearchValue('')
+                            inputRef.current.focus()
+                        }}
                     >
-                        <SearchIcon />
-                    </IconButton>
-                </Paper>
-                <Stack
-                    direction="row"
-                    justifyContent="flex-end"
-                    spacing={2}
-                    p={'30px 0 0 0'}
-                >
-                    <Button onClick={() => setKeyword('')} variant="outlined">
-                        Reset
-                    </Button>
-                    <Button onClick={handleCallApiSearch} variant="contained">
-                        Search
-                    </Button>
-                </Stack>
-            </Box>
-        </Container>
+                        RESET
+                    </button>
+                    <button className="searchButton" type="submit">
+                        SEARCH
+                    </button>
+                </div>
+            </form>
+        </div>
     )
 }
 

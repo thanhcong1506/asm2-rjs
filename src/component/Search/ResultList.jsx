@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid'
 import { Typography } from '@mui/material'
 import instance from '../../axios'
 import requests from '../../requests'
-import MovieDetail from '../VideoDetail/VideoDetail'
+import MovieDetail from '../../component/MovieDetail/MovieDetail'
 
 const baseUrl = 'https://image.tmdb.org/t/p/original/'
 // Video
